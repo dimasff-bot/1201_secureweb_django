@@ -1,0 +1,65 @@
+{% include 'header.html' %}
+
+<body>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ appType }} | Car Project</h1>
+
+            <h3>Demo:
+                <a href="{% url 'createcar' %}">Create</a> /
+                <a href="{% url 'readcar' %}">Read</a> /
+                <a href="{% url 'updatecar' %}">Update</a> /
+                <a href="{% url 'deletecar' %}">Delete</a> /
+                <a href="{% url 'searchcar' %}">Search</a>
+            </h3>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h4>Update Car Data</h4>
+
+            <form role="form" action="{% url 'updatecarsave' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="oldName">Existing Name (yang ingin diubah)</label>
+                    <input type="text" class="form-control" id="oldName" name="oldName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newName">New Name</label>
+                    <input type="text" class="form-control" id="newName" name="newName">
+                </div>
+
+                <div class="form-group">
+                    <label for="carBrand">Brand</label>
+                    <input type="text" class="form-control" id="carBrand" name="carBrand">
+                </div>
+
+                <div class="form-group">
+                    <label for="carModel">Model</label>
+                    <input type="text" class="form-control" id="carModel" name="carModel">
+                </div>
+
+                <div class="form-group">
+                    <label for="carPrice">Price</label>
+                    <input type="text" class="form-control" id="carPrice" name="carPrice">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update</button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% include 'footer.html' %}
