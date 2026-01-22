@@ -1,0 +1,23 @@
+{% include "header.html" %}
+
+<h2>Secure Profile</h2>
+<p>Welcome, {{ request.session.user }} </p>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ appType }} | Car Project</h1>
+
+            <h3>Demo:
+                <a href="{% url 'createcar' %}">Create</a> /
+                <a href="{% url 'readcar' %}">Read</a> /
+                <a href="{% url 'updatecar' %}">Update</a> /
+                <a href="{% url 'deletecar' %}">Delete</a> /
+                <a href="{% url 'searchcar' %}">Search</a> /
+                <a href="{% url 'help' %}">Help</a>
+            </h3>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}

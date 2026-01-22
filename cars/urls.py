@@ -5,23 +5,25 @@ urlpatterns = [
     # HTML pages (client)
     path('', views.index, name='index'),
 
-    path('createcar', views.createcar, name='createcar'),
-    path('createcarsave', views.createcarsave, name='createcarsave'),
+    path('signin/', views.signin, name='signin'),
+    path('profilesecure/', views.profilesecure, name='profilesecure'),
 
-    path('readcar', views.readcar, name='readcar'),
+    path('createcar/', views.createcar, name='createcar'),
+    path('createcarsave/', views.createcarsave, name='createcarsave'),
 
-    path('updatecar', views.updatecar, name='updatecar'),
-    path('updatecarsave', views.updatecarsave, name='updatecarsave'),
+    path('readcar/', views.readcar, name='readcar'),
 
-    path('deletecar', views.deletecar, name='deletecar'),
-    path('deletecarsave', views.deletecarsave, name='deletecarsave'),
+    path('updatecar/', views.updatecar, name='updatecar'),
+    path('updatecarsave/', views.updatecarsave, name='updatecarsave'),
 
-    path('searchcar', views.searchcar, name='searchcar'),
-    path('searchcarsave', views.searchcarsave, name='searchcarsave'),
+    path('deletecar/', views.deletecar, name='deletecar'),
+    path('deletecarsave/', views.deletecarsave, name='deletecarsave'),
 
-    path('help', views.help, name='help'),
+    path('searchcar/', views.searchcar, name='searchcar'),
+    path('searchcarsave/', views.searchcarsave, name='searchcarsave'),
+
+    path('help/', views.help, name='help'),
 
     # API (server)
     path('api/cars/', views.api_cars, name='api_cars'),
-    path('api/cars', views.api_cars),  # accept both /api/cars and /api/cars/
 ]

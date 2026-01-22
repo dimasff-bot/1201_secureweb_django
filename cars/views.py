@@ -1,10 +1,45 @@
 import json
+import uuid
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
-from django.urls import reverse
 from django.db import models
 from .models import TBCars
+
+# ----------------------
+# Session
+# ----------------------
+
+def signin(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+
+        # dummy auth
+        if username:
+            request.session['is_authenticated'] = True
+            request.session["username"] = username
+            request.session['login_uuid'] = str(uuid.uuid4())
+            request.session.set_expiry(30)
+
+            token = str(uuid.uuid4())
+            request.session['secure_token'] = token
+
+            return redirect(f"/profilesecure/?token={token}")
+
+    return render(request, 'signin.html', {"appType": "Web Service (Django)"})
+
+def profilesecure(request):
+    token = request.GET.get('token')
+    session_token = request.session.get('secure_token')
+
+    if token != session_token:
+        return redirect('/signin/')
+
+    # one-time token
+    del request.session['secure_token']
+
+    return render(request, 'profilesecure.html', {"appType": "Web Service (Django)"})
 
 # ----------------------
 # HTML Views (client)
@@ -13,25 +48,54 @@ from .models import TBCars
 API_URL = "http://127.0.0.1:8000/api/cars/"
 
 def index(request):
+    # session check
+    if not request.session.get('is_authenticated'):
+        return redirect('signin')
+
     return render(request, 'index.html', {"appType": "Web Service (Django)"})
 
 def createcar(request):
+    # session check
+    if not request.session.get('is_authenticated'):
+        return redirect('signin')
+
     return render(request, 'createcar.html', {"appType": "Web Service (Django)"})
 
 def readcar(request):
+    # session check
+    if not request.session.get('is_authenticated'):
+        return redirect('signin')
+
     # client-side will call the API internally (server-side request)
-    import requests
-    resp = requests.get(API_URL)
-    rows = resp.json() if resp.status_code == 200 else []
-    return render(request, 'readcar.html', {"rows": rows, "appType": "Web Service (Django)"})
+    rows = TBCars.objects.all()
+    return render(
+        request,
+        'readcar.html',
+        {
+            "rows": rows,
+            "appType": "Web Service (Django)"
+        }
+    )
 
 def updatecar(request):
+    # session check
+    if not request.session.get('is_authenticated'):
+        return redirect('signin')
+
     return render(request, 'updatecar.html', {"appType": "Web Service (Django)"})
 
 def deletecar(request):
+    # session check
+    if not request.session.get('is_authenticated'):
+        return redirect('signin')
+
     return render(request, 'deletecar.html', {"appType": "Web Service (Django)"})
 
 def searchcar(request):
+    # session check
+    if not request.session.get('is_authenticated'):
+        return redirect('signin')
+
     return render(request, 'searchcar.html', {"appType": "Web Service (Django)"})
 
 def help(request):
@@ -84,6 +148,7 @@ def searchcarsave(request):
 # ----------------------
 # REST API Views (server)
 # ----------------------
+
 @csrf_exempt
 def api_cars(request):
     """
